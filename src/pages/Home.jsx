@@ -10,7 +10,7 @@ function Home() {
             <Link to="/cake" className="home__icon home__icon--bowl">
                 <img src={bowl} alt="cake bowl" />
             </Link>
-            <Link to="/letter" className="home__icon home__icon--envelope">
+            <Link to="/wish" className="home__icon home__icon--envelope">
                 <img src={envelope} alt="envelope" />
             </Link>
             <Link to="/photobooth" className="home__icon home__icon--camera">

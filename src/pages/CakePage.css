@@ -1,0 +1,129 @@
+.cake {
+  width: 100%;
+  max-width: 430px;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #b07ab0 url('../assets/background/decorcake-bg.png')
+}
+
+.cake__header a {
+  font-size: 28px;
+  line-height: 1;
+  text-decoration: none;
+  color: #AF77AE;
+}
+
+.cake__actions button {
+  padding: 8px 18px;
+  font-size: 14px;
+  border: 10px #8BA581;
+  border-radius: 999px;
+  background: #AF77AE;
+  cursor: pointer;
+  color: #f3ee5b;
+}
+
+.cake__actions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.cake__area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cake__stage {
+  position: relative;
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+.cake__layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: auto;
+  pointer-events: none;
+}
+
+.cake__layer--stand {
+  width: 90%;
+  bottom: 0;
+}
+
+.cake__layer--stacked {
+  width: 55%;
+  bottom: 25%;
+}
+
+.cake__layer--wp {
+  width: 57%;
+  bottom: 25%;
+}
+
+.cake__decor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.cake__decor--cherry {
+  width: 7%;
+}
+
+.cake__decor--candle {
+  width: 20%;
+}
+
+.cake__actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+}
+
+.cake__tray {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 8px 16px 16px;
+  padding: 12px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border-radius: 16px;
+}
+
+.cake__slot {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cake__pile {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  left: -25%;
+  bottom: 25%;
+}
+
+.cake__slot img {
+  max-width: 80%;
+  max-height: 80%;
+  display: block;
+  pointer-events: none;
+}
+
+.cake__locked {
+  opacity: 0.35;
+}
