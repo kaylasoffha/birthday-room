@@ -1,0 +1,219 @@
+.letter {
+  --paper-ratio: 4 / 5;
+  width: 100%;
+  max-width: 430px;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #9ab88f url('../assets/background/letter-bg.png') center / cover no-repeat;
+}
+
+.letter__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.letter__send {
+  width: 56px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.letter__send img {
+  width: 100%;
+  display: block;
+}
+
+.letter__send:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.letter__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 12px;
+  padding: 0 12px 24px;
+}
+
+.letter__paper {
+  width: 150%;
+  position: relative;
+  flex: 1;
+  align-self: center;
+  aspect-ratio: var(--paper-ratio);
+  background: #f0ecc0;
+  border: 10px solid #ea5a8b;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  cursor: text;
+}
+
+.letter__paper textarea {
+  width: 100%;
+  height: 100%;
+  padding: 14px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  font: inherit;
+  font-size: 18px;
+  color: #6b3b2a;
+}
+
+.letter__text {
+  padding: 14px;
+  font-size: 18px;
+  color: #6b3b2a;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.letter__text--empty {
+  opacity: 0.4;
+}
+
+.letter__sticker {
+  position: absolute;
+  width: 10%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.letter__stickers {
+  width: 15%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 8px;
+  background: #e9e9e9;
+  border-radius: 12px;
+}
+
+.letter__slot {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.letter__slot:empty {
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 50%;
+}
+
+.letter__undo {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.letter__undo:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.letter__slot img {
+  max-width: 80%;
+  max-height: 80%;
+  display: block;
+  pointer-events: none;
+}
+
+.letter__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.letter__done {
+  color: #fff;
+  font-size: 18px;
+}
+
+.letter__close {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.envelope {
+  position: relative;
+  width: min(80vw, 340px);
+  aspect-ratio: 3 / 2;
+}
+
+.envelope__back {
+  position: absolute;
+  inset: 0;
+  background: #cfcfcf;
+  border-radius: 8px;
+}
+
+.envelope__paper {
+  position: absolute;
+  left: 15%;
+  width: 70%;
+  top: -130%;
+  aspect-ratio: var(--paper-ratio);
+  padding: 10px;
+  background: #f0ecc0;
+  border: 6px solid #ea5a8b;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #6b3b2a;
+  overflow: hidden;
+  transition: top 1.2s ease-in-out;
+}
+
+.envelope--insert .envelope__paper,
+.envelope--done .envelope__paper {
+  top: -35%;
+}
+
+.envelope--tear .envelope__paper {
+  animation: shake 0.9s ease-in-out;
+}
+
+.envelope__front {
+  position: absolute;
+  inset: 0;
+  background: #e6e6e6;
+  clip-path: polygon(0 35%, 50% 75%, 100% 35%, 100% 100%, 0 100%);
+  border-radius: 0 0 8px 8px;
+  pointer-events: none;
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-4deg) translateX(-6px); }
+  40% { transform: rotate(4deg) translateX(6px); }
+  60% { transform: rotate(-3deg) translateX(-4px); }
+  80% { transform: rotate(3deg) translateX(4px); }
+}
+
+.letter__paper textarea,
+.letter__text,
+.envelope__paper {
+  font-family: 'Dancing Script', cursive;
+}
