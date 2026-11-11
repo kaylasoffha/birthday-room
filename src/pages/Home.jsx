@@ -1,15 +1,22 @@
 import {Link} from 'react-router'
+import './Home.css'
+import bowl from '../assets/icons/bowl.png'
+import envelope from '../assets/icons/envelope.png'
+import camera from '../assets/icons/camera.png'
 
 function Home() {
     return (
-        <div>
-            <h1>Birthday Room</h1>
-            <Link to="/cake">Decor your cake</Link>
-            <br />
-            <Link to="/letter">Make a wish</Link>
-            <br />
-            <Link to="/photobooth">Say cheese!</Link>
-        </div>
+        <main className="home">
+            <Link to="/cake" className="home__icon home__icon--bowl">
+                <img src={bowl} alt="cake bowl" />
+            </Link>
+            <Link to="/letter" className="home__icon home__icon--envelope">
+                <img src={envelope} alt="envelope" />
+            </Link>
+            <Link to="/photobooth" className="home__icon home__icon--camera">
+                <img src={camera} alt="camera" />
+            </Link>
+        </main>
     )
 }
 

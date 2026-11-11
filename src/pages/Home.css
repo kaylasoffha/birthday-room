@@ -1,0 +1,36 @@
+.home {
+    position: relative;
+    width: 100%;    
+    max-width: 430px;
+    height: 100vh;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #b07ab0 url('../assets/background/home-bg.png') center / cover no-repeat;
+}
+
+.home__icon {
+    position: absolute;
+}
+
+.home__icon img {
+    display:block;
+    width: 100%;
+}
+
+.home__icon--bowl {
+    left: 42%;
+    top: 40%;
+    width: 20%;
+}
+
+.home__icon--envelope {
+    left: 68%;
+    top: 43%;
+    width: 13%;
+}
+
+.home__icon--camera {
+    left: 24%;
+    top: 43%;
+    width: 15%;
+}
