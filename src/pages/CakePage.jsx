@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
-import { Link } from 'react-router'
 import Draggable from '../components/Draggable'
 import './CakePage.css'
 
+import BackButton from '../components/BackButton'
 import tierStand from '../assets/cake/tierstand.png'
 import stackedCake from '../assets/cake/stackedcake.png'
 import wpCake from '../assets/cake/wpcake.png'
@@ -64,8 +64,8 @@ function CakePage() {
   return (
     <main className="cake">
       <header className="cake__header">
-        <Link to="/">←</Link>
-      </header>
+        <BackButton />
+    </header>
 
       <div className="cake__area">
         <div className="cake__stage" ref={stageRef}>

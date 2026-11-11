@@ -1,0 +1,16 @@
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+}
+
+.back-button img {
+  height: auto;
+  display: block;
+}
+
+.back-button:active {
+  opacity: 0.6;
+}

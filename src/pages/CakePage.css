@@ -9,13 +9,6 @@
   background: #b07ab0 url('../assets/background/decorcake-bg.png')
 }
 
-.cake__header a {
-  font-size: 28px;
-  line-height: 1;
-  text-decoration: none;
-  color: #AF77AE;
-}
-
 .cake__actions button {
   padding: 8px 18px;
   font-size: 14px;
