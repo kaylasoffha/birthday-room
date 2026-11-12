@@ -84,58 +84,65 @@ function LetterPage() {
     <main className="letter">
       <header className="letter__header">
         <BackButton />
+      </header>
+
+      <div className="letter__body">
+        <div className="letter__row">
+          <div
+            className="letter__paper"
+            ref={paperRef}
+            onClick={() => setEditing(true)}
+          >
+            {editing ? (
+              <textarea
+                autoFocus
+                value={text}
+                maxLength={200}
+                placeholder="Tulis ucapanmu..."
+                onChange={(e) => setText(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onBlur={() => setEditing(false)}
+              />
+            ) : (
+              <p className={`letter__text ${text ? '' : 'letter__text--empty'}`}>
+                {text || 'Ketuk untuk menulis...'}
+              </p>
+            )}
+            <PlacedStickers stickers={stickers} />
+          </div>
+
+          <aside className="letter__stickers">
+            <div className="letter__grid">
+              {STICKERS.map((s) => (
+                <div className="letter__slot" key={s.id}>
+                  {!usedIds.includes(s.id) && (
+                    <Draggable dropRef={paperRef} onDrop={(p) => handleDrop(s, p)}>
+                      <img src={s.src} alt="Stiker" draggable="false" />
+                    </Draggable>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <button
+              className="letter__undo"
+              onClick={handleUndoSticker}
+              disabled={stickers.length === 0}
+              aria-label="Batalkan stiker"
+              title="Batalkan stiker"
+            >
+              ↩
+            </button>
+          </aside>
+        </div>
+
         <button
           className="letter__send"
           onClick={handleSend}
           disabled={!text.trim()}
-          aria-label="Masukkan ucapan ke amplop"
         >
           <img src={envelopeIcon} alt="" draggable="false" />
         </button>
-        <button
-            className="letter__undo"
-            onClick={handleUndoSticker}
-            disabled={stickers.length === 0}
-        >
-            Batalkan stiker
-        </button>
-      </header>
-
-      <div className="letter__body">
-        <div
-          className="letter__paper"
-          ref={paperRef}
-          onClick={() => setEditing(true)}
-        >
-          {editing ? (
-            <textarea
-              autoFocus
-              value={text}
-              maxLength={200}
-              placeholder="Tulis ucapanmu..."
-              onChange={(e) => setText(e.target.value)}
-              onKeyDown={handleKeyDown}
-              onBlur={() => setEditing(false)}
-            />
-          ) : (
-            <p className={`letter__text ${text ? '' : 'letter__text--empty'}`}>
-              {text || 'Ketuk untuk menulis...'}
-            </p>
-          )}
-          <PlacedStickers stickers={stickers} />
-        </div>
-
-        <div className="letter__stickers">
-            {STICKERS.map((s) => (
-                <div className="letter__slot" key={s.id}>
-                {!usedIds.includes(s.id) && (
-                    <Draggable dropRef={paperRef} onDrop={(p) => handleDrop(s, p)}>
-                    <img src={s.src} alt="Stiker" draggable="false" />
-                    </Draggable>
-                )}
-                </div>
-            ))}
-        </div>
       </div>
 
       {phase !== 'idle' && (
