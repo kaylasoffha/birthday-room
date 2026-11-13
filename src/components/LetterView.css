@@ -1,0 +1,18 @@
+.letter-view {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #f0ecc0;
+  border: 10px solid #ea5a8b;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.letter-view__text {
+  padding: 14px;
+  font-size: 18px;
+  color: #6b3b2a;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

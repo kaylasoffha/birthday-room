@@ -1,44 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import BackButton from '../components/BackButton'
-import Draggable from '../components/Draggable'
+import PlacedStickers from '../components/PlacedStickers'
+import StickerPanel from '../components/StickerPanel'
+import { useGift } from '../context/giftContext'
 import './LetterPage.css'
 
 import envelopeIcon from '../assets/icons/envelope.png'
 
-const stickerFiles = import.meta.glob('../assets/letter/stickers/*.png', {
-  eager: true,
-  import: 'default',
-})
-
-const STICKERS = Object.entries(stickerFiles).map(([path, src]) => ({
-  id: path,
-  src,
-}))
-
-function PlacedStickers({ stickers }) {
-  return (
-    <>
-      {stickers.map((s) => (
-        <img
-          key={s.id}
-          src={s.src}
-          className="letter__sticker"
-          style={{ left: `${s.x}%`, top: `${s.y}%` }}
-          alt=""
-          draggable="false"
-        />
-      ))}
-    </>
-  )
-}
 
 function LetterPage() {
-  const [text, setText] = useState('')
+  const { gift, updateGift } = useGift()
+  const { text, stickers } = gift.letter
+
+  const setText = (value) =>
+    updateGift('letter', (letter) => ({ ...letter, text: value }))
+  const setStickers = (value) =>
+    updateGift('letter', (letter) => ({ ...letter, stickers: value }))
+
   const [editing, setEditing] = useState(false)
-  const [stickers, setStickers] = useState([])
   const [phase, setPhase] = useState('idle')
   const paperRef = useRef(null)
-  const usedIds = stickers.map((s) => s.stickerId)
 
   useEffect(() => {
     if (phase === 'tear') {
@@ -73,7 +54,9 @@ function LetterPage() {
   }
 
   function handleSend() {
-    if (text.trim()) setPhase('tear')
+    if (!text.trim()) return
+    updateGift('letter', (letter) => ({ ...letter, sent: true }))
+    setPhase('tear')
   }
 
   function handleClose() {
@@ -111,29 +94,13 @@ function LetterPage() {
             <PlacedStickers stickers={stickers} />
           </div>
 
-          <aside className="letter__stickers">
-            <div className="letter__grid">
-              {STICKERS.map((s) => (
-                <div className="letter__slot" key={s.id}>
-                  {!usedIds.includes(s.id) && (
-                    <Draggable dropRef={paperRef} onDrop={(p) => handleDrop(s, p)}>
-                      <img src={s.src} alt="Stiker" draggable="false" />
-                    </Draggable>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            <button
-              className="letter__undo"
-              onClick={handleUndoSticker}
-              disabled={stickers.length === 0}
-              aria-label="Batalkan stiker"
-              title="Batalkan stiker"
-            >
-              ↩
-            </button>
-          </aside>
+          <StickerPanel
+            className="letter__stickers"
+            placed={stickers}
+            dropRef={paperRef}
+            onPlace={(sticker) => setStickers([...stickers, sticker])}
+            onUndo={handleUndoSticker}
+          />
         </div>
 
         <button

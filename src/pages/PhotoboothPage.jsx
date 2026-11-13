@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import BackButton from '../components/BackButton'
+import PhotoFrameView from '../components/PhotoFrameView'
+import StickerPanel from '../components/StickerPanel'
 import useCamera from '../hooks/useCamera'
+import { useGift } from '../context/giftContext'
+import { FRAME_COLORS } from '../data/photoFrame'
+import { downloadFrame } from '../utils/exportFrame'
 import './PhotoboothPage.css'
 
 import cameraIcon from '../assets/icons/camera.png'
@@ -19,14 +24,22 @@ const PHOTO_HEIGHT = 800
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function PhotoboothPage() {
-  const { stream, error } = useCamera()
-  const [phase, setPhase] = useState('choose')
-  const [frame, setFrame] = useState(null)
-  const [photos, setPhotos] = useState([])
+  const { gift, updateGift } = useGift()
+  const photo = gift.photo
+  const color =
+    FRAME_COLORS.find((c) => c.id === photo?.colorId) ?? FRAME_COLORS[0]
+
+  const [phase, setPhase] = useState(photo ? 'result' : 'choose')
+  const [frame, setFrame] = useState(
+    () => FRAMES.find((f) => f.id === photo?.frameId) ?? null,
+  )
   const [count, setCount] = useState(null)
   const [flash, setFlash] = useState(false)
   const [busy, setBusy] = useState(false)
+
+  const { stream, error } = useCamera(phase !== 'result')
   const videoRef = useRef(null)
+  const frameRef = useRef(null)
   const aliveRef = useRef(true)
 
   useEffect(() => {
@@ -53,7 +66,7 @@ function PhotoboothPage() {
   }
 
   function handleRetake() {
-    setPhotos([])
+    updateGift('photo', null)
     setPhase('shoot')
   }
 
@@ -107,9 +120,36 @@ function PhotoboothPage() {
       if (!aliveRef.current) return
     }
 
-    setPhotos(taken)
+    updateGift('photo', {
+      frameId: frame.id,
+      photos: taken,
+      colorId: FRAME_COLORS[0].id,
+      stickers: [],
+    })
     setBusy(false)
     setPhase('result')
+  }
+
+  function handleColor(colorId) {
+    updateGift('photo', (p) => ({ ...p, colorId }))
+  }
+
+  function handlePlaceSticker(sticker) {
+    updateGift('photo', (p) => ({ ...p, stickers: [...p.stickers, sticker] }))
+  }
+
+  function handleUndoSticker() {
+    updateGift('photo', (p) => ({ ...p, stickers: p.stickers.slice(0, -1) }))
+  }
+
+  function handleDownload() {
+    downloadFrame({
+      frameId: photo.frameId,
+      photos: photo.photos,
+      color: color.value,
+      textColor: color.text,
+      stickers: photo.stickers,
+    })
   }
 
   return (
@@ -173,13 +213,44 @@ function PhotoboothPage() {
         </div>
       )}
 
-      {phase === 'result' && (
+      {phase === 'result' && photo && (
         <div className="booth__result">
-          <div className="booth__preview">
-            {photos.map((src, i) => (
-              <img key={i} src={src} alt={`Foto ${i + 1}`} />
+          <div className="booth__row">
+            <div className="booth__frame-area" ref={frameRef}>
+              <PhotoFrameView
+                frameId={photo.frameId}
+                photos={photo.photos}
+                color={color.value}
+                textColor={color.text}
+                stickers={photo.stickers}
+              />
+            </div>
+
+            <StickerPanel
+              className="booth__stickers"
+              placed={photo.stickers}
+              dropRef={frameRef}
+              onPlace={handlePlaceSticker}
+              onUndo={handleUndoSticker}
+            />
+          </div>
+
+          <div className="booth__colors">
+            {FRAME_COLORS.map((c) => (
+              <button
+                key={c.id}
+                className={`booth__swatch ${c.id === color.id ? 'booth__swatch--active' : ''}`}
+                style={{ backgroundColor: c.value }}
+                onClick={() => handleColor(c.id)}
+                aria-label={`Warna ${c.name}`}
+                aria-pressed={c.id === color.id}
+              />
             ))}
           </div>
+
+          <button className="booth__download" onClick={handleDownload}>
+            Unduh foto
+          </button>
           <button className="booth__link" onClick={handleRetake}>
             Ambil ulang
           </button>

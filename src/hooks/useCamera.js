@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
-export default function useCamera() {
+export default function useCamera(enabled = true) {
   const [stream, setStream] = useState(null)
   const [error, setError] = useState(() =>
-    navigator.mediaDevices?.getUserMedia ? null : 'unsupported'
+    navigator.mediaDevices?.getUserMedia ? null : 'unsupported',
   )
 
   useEffect(() => {
-    if (!navigator.mediaDevices?.getUserMedia) return
+    if (!enabled || !navigator.mediaDevices?.getUserMedia) return
 
     let cancelled = false
     let current = null
@@ -29,8 +29,9 @@ export default function useCamera() {
     return () => {
       cancelled = true
       current?.getTracks().forEach((t) => t.stop())
+      setStream(null)
     }
-  }, [])
+  }, [enabled])
 
   return { stream, error }
 }

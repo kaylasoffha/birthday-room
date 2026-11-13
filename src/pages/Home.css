@@ -34,3 +34,25 @@
     top: 43%;
     width: 15%;
 }
+
+.home__icon--gift {
+  left: 8%;
+  top: 38%;
+  width: 14%;
+}
+
+.home__icon--locked img {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.home__progress {
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #ea5a8b;
+  color: #fff;
+  font-size: 12px;
+}

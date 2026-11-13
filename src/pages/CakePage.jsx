@@ -1,36 +1,33 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
+import BackButton from '../components/BackButton'
+import CakeView from '../components/CakeView'
 import Draggable from '../components/Draggable'
+import { useGift } from '../context/giftContext'
 import './CakePage.css'
 
-import BackButton from '../components/BackButton'
-import tierStand from '../assets/cake/tierstand.png'
-import stackedCake from '../assets/cake/stackedcake.png'
-import wpCake from '../assets/cake/wpcake.png'
 import tray from '../assets/cake/ompreng.png'
 import cake from '../assets/cake/cake.png'
 import whippedCream from '../assets/cake/whippedcream.png'
 import cherry from '../assets/cake/cherry.png'
 import cherries from '../assets/cake/cherries.png'
 import candles from '../assets/cake/candles.png'
-import candlesLit from '../assets/cake/candleslit.png'
 
-const CAKE_LAYERS = [
-  null,
-  { src: stackedCake, name: 'stacked' },
-  { src: wpCake, name: 'wp' },
-]
 const ITEMS = [
-  { id: 'cherry', label: 'Ceri', icon: cherry, pile: cherries  },
+  { id: 'cherry', label: 'Ceri', icon: cherry, pile: cherries },
   { id: 'cream', label: 'Krim', icon: whippedCream },
   { id: 'candle', label: 'Lilin 22', icon: candles },
   { id: 'cake', label: 'Kue', icon: cake },
 ]
 
-const DECOR_IMAGES = { cherry, candle: candlesLit }
-
 function CakePage() {
-  const [base, setBase] = useState(0)
-  const [decorations, setDecorations] = useState([])
+  const { gift, updateGift } = useGift()
+  const { base, decorations } = gift.cake
+
+  const setBase = (value) =>
+    updateGift('cake', (cake) => ({ ...cake, base: value }))
+  const setDecorations = (value) =>
+    updateGift('cake', (cake) => ({ ...cake, decorations: value }))
+
   const stageRef = useRef(null)
 
   const hasCandle = decorations.some((d) => d.type === 'candle')
@@ -65,28 +62,11 @@ function CakePage() {
     <main className="cake">
       <header className="cake__header">
         <BackButton />
-    </header>
+      </header>
 
       <div className="cake__area">
         <div className="cake__stage" ref={stageRef}>
-          <img src={tierStand} className="cake__layer cake__layer--stand" alt="" />
-            {CAKE_LAYERS[base] && (
-            <img
-                src={CAKE_LAYERS[base].src}
-                className={`cake__layer cake__layer--${CAKE_LAYERS[base].name}`}
-                alt="Kue"
-            />
-            )}
-          {decorations.map((d) => (
-            <img
-              key={d.id}
-              src={DECOR_IMAGES[d.type]}
-              className={`cake__decor cake__decor--${d.type}`}
-              style={{ left: `${d.x}%`, top: `${d.y}%` }}
-              alt=""
-              draggable="false"
-            />
-          ))}
+          <CakeView base={base} decorations={decorations} />
         </div>
       </div>
 
@@ -102,31 +82,31 @@ function CakePage() {
           const status = getStatus(item.id)
           return (
             <div className="cake__slot" key={item.id}>
-                {item.pile && (
-                    <img
-                    src={item.pile}
-                    alt=""
-                    className={`cake__pile ${status === 'locked' ? 'cake__locked' : ''}`}
-                    draggable="false"
-                    />
-                )}
-                {status === 'ready' && (
-                    <Draggable
-                    dropRef={stageRef}
-                    onDrop={(point) => handleDrop(item.id, point)}
-                    >
-                    <img src={item.icon} alt={item.label} draggable="false" />
-                    </Draggable>
-                )}
-                {status === 'locked' && (
-                    <img
-                    src={item.icon}
-                    alt={item.label}
-                    className="cake__locked"
-                    draggable="false"
-                    />
-                )}
-                </div>
+              {item.pile && (
+                <img
+                  src={item.pile}
+                  alt=""
+                  className={`cake__pile ${status === 'locked' ? 'cake__locked' : ''}`}
+                  draggable="false"
+                />
+              )}
+              {status === 'ready' && (
+                <Draggable
+                  dropRef={stageRef}
+                  onDrop={(point) => handleDrop(item.id, point)}
+                >
+                  <img src={item.icon} alt={item.label} draggable="false" />
+                </Draggable>
+              )}
+              {status === 'locked' && (
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  className="cake__locked"
+                  draggable="false"
+                />
+              )}
+            </div>
           )
         })}
       </div>

@@ -8,6 +8,7 @@
   flex-direction: column;
   overflow: hidden;
   background: #9ab88f url('../assets/background/letter-bg.png') center / cover no-repeat;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .letter__header {
@@ -239,4 +240,9 @@
 .envelope__paper,
 .letter__done {
   font-family: 'Times New Roman', cursive;
+}
+
+.letter__stickers {
+  width: 30%;
+  align-self: stretch;
 }
